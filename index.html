@@ -5,62 +5,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@100..900&family=Pacifico&family=Poppins:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Inter:opsz,wght@14..32,500&family=Pacifico&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <title>Valentine's Day Surprise</title>
+  <title>Valentine's Day</title>
   <style>
     body {
       font-family: "Archivo", serif !important;
       overflow: hidden;
     }
-
     .gradient-background {
-      background: linear-gradient(180deg, #ffd0e5 0%, #ffe8f2 36%, #ffffff 100%);
+      background: linear-gradient(180deg, rgba(255, 208, 229, 1) 0%, rgba(255, 232, 242, 1) 36%, rgba(255, 255, 255, 1) 100%);
+      animation: bgFade 5s infinite alternate;
     }
-
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-      }
-      40% {
-        transform: translateY(-15px);
-      }
-      60% {
-        transform: translateY(-7px);
-      }
+    @keyframes bgFade {
+      0% { filter: brightness(1); }
+      100% { filter: brightness(1.2); }
     }
-
-    .bounce {
-      animation: bounce 2s infinite;
+    .bounce2 {
+      animation: bounce2 2s ease infinite;
     }
-
-    @keyframes heartBeat {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-      100% { transform: scale(1); }
+    @keyframes bounce2 {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-20px); }
+      60% { transform: translateY(-10px); }
     }
-
-    .heartBeat {
-      animation: heartBeat 1s infinite;
+    .heart {
+      position: absolute;
+      animation: float 4s infinite ease-in-out;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
     }
   </style>
 </head>
-<body class="gradient-background">
-  <div class="flex items-center justify-center h-screen">
-    <div class="flex flex-col items-center p-4 text-center">
-      <img id="imageDisplay" src="./images/image1.gif" alt="Cute animation" class="rounded-md h-[300px] shadow-lg transition-transform duration-300" />
-      <h2 id="valentineQuestion" class="text-4xl font-bold italic text-[#bd1e59] my-4 heartBeat">Will you be my Valentine?</h2>
-      <div class="flex gap-4 pt-5" id="responseButtons">
-        <button id="yesButton" class="bounce bg-green-500 hover:bg-green-600 text-white text-lg font-medium px-6 py-3 rounded-xl transition-transform duration-200">
+<body class="gradient-background relative">
+  <div class="absolute top-0 left-0 w-full h-full overflow-hidden">
+    <img src="./images/heart.png" class="heart w-10 opacity-50" style="top: 10%; left: 20%;">
+    <img src="./images/heart.png" class="heart w-16 opacity-70" style="top: 40%; left: 70%; animation-duration: 6s;">
+    <img src="./images/heart.png" class="heart w-12 opacity-60" style="top: 70%; left: 50%; animation-duration: 5s;">
+  </div>
+  <div class="flex items-center justify-center h-screen relative z-10">
+    <div class="flex flex-col items-center p-4">
+      <img id="imageDisplay" src="./images/image1.gif" alt="Cute kitten with flowers" class="rounded-md h-[300px] shadow-xl animate-pulse" style="object-fit: cover;" />
+      <h2 id="valentineQuestion" class="text-4xl font-bold italic text-[#bd1e59] my-4 text-center">Will you be my Valentine?</h2>
+      <div class="flex gap-4 pt-[20px] items-center" id="responseButtons">
+        <button id="yesButton" class="bounce2 inline-flex items-center justify-center rounded-xl text-[20px] font-medium hover:bg-green-400 min-h-12 min-w-[75px] px-4 py-2 bg-green-500 text-white transition shadow-md">
           Yes
         </button>
-        <button id="noButton" class="bg-red-500 hover:bg-red-600 text-white text-lg font-medium px-6 py-3 rounded-xl transition-transform duration-200">
+        <button id="noButton" class="inline-flex items-center justify-center rounded-xl text-[20px] font-medium transition hover:bg-red-700 h-12 min-w-[75px] px-4 py-2 bg-red-500 text-white shadow-md">
           No
         </button>
       </div>
     </div>
   </div>
-
   <script type="module">
     import confetti from 'https://cdn.skypack.dev/canvas-confetti';
     const yesButton = document.getElementById('yesButton');
@@ -70,20 +68,24 @@
     const responseButtons = document.getElementById('responseButtons');
     
     let noClickCount = 0;
+    let buttonHeight = 48;
+    let buttonWidth = 80;
+    let fontSize = 20;
     const imagePaths = [
-      "./images/image1.gif", "./images/image2.gif", "./images/image3.gif",
-      "./images/image4.gif", "./images/image5.gif", "./images/image6.gif",
-      "./images/image7.gif"
+      "./images/image1.gif", "./images/image2.gif", "./images/image3.gif", "./images/image4.gif", "./images/image5.gif", "./images/image6.gif", "./images/image7.gif"
     ];
     
     noButton.addEventListener('click', function() {
       if (noClickCount < 5) {
         noClickCount++;
         imageDisplay.src = imagePaths[noClickCount];
-        yesButton.style.transform = `scale(${1 + noClickCount * 0.2})`;
-        if (noClickCount < 6) {
-          noButton.textContent = ["No", "Are you sure?", "Pookie please", "Don't do this to me :(", "You're breaking my heart", "I'm gonna cry..."][noClickCount];
-        }
+        buttonHeight += 17;
+        buttonWidth += 25;
+        fontSize += 20;
+        yesButton.style.height = `${buttonHeight}px`;
+        yesButton.style.width = `${buttonWidth}px`;
+        yesButton.style.fontSize = `${fontSize}px`;
+        noButton.textContent = ["No", "Are you sure?", "Pookie please", "Don't do this to me :(", "You're breaking my heart", "I'm gonna cry..."][noClickCount];
       }
     });
     
@@ -93,6 +95,6 @@
       responseButtons.style.display = 'none';
       confetti();
     });
-  </script>  
+  </script>
 </body>
 </html>
