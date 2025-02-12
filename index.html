@@ -3,89 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Inter:opsz,wght@14..32,500&family=Pacifico&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
   <title>Valentine's Day</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1"></script>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
     body {
-      font-family: "Archivo", serif !important;
+      font-family: 'Pacifico', cursive;
       overflow: hidden;
-      animation: changeBg 10s infinite alternate;
+      margin: 0;
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4, #ffdde1, #ff9a9e);
+      background-size: 300% 300%;
+      animation: gradientBG 10s ease infinite;
     }
-    @keyframes changeBg {
-      0% { background-color: #ffb6c1; }
-      50% { background-color: #ff69b4; }
-      100% { background-color: #ff1493; }
+    
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
-    .heart {
+    
+    .heartfall {
       position: absolute;
+      top: -50px;
+      font-size: 30px;
       color: red;
-      font-size: 24px;
-      animation: float 5s infinite ease-in-out;
+      opacity: 0.7;
+      animation: fall linear infinite;
     }
-    @keyframes float {
+    
+    @keyframes fall {
       0% { transform: translateY(0); opacity: 1; }
-      50% { transform: translateY(-50px); opacity: 0.6; }
-      100% { transform: translateY(-100px); opacity: 0; }
+      100% { transform: translateY(100vh); opacity: 0; }
+    }
+
+    .bounce {
+      animation: bounce 1.5s infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
   </style>
 </head>
-<body class="relative">
-  <div class="absolute top-0 left-0 w-full h-full overflow-hidden">
-    <span class="heart" style="top: 10%; left: 20%; animation-duration: 4s;">❤</span>
-    <span class="heart" style="top: 30%; left: 50%; animation-duration: 6s;">❤</span>
-    <span class="heart" style="top: 60%; left: 80%; animation-duration: 5s;">❤</span>
-  </div>
-  <div class="flex items-center justify-center h-screen relative z-10">
-    <div class="flex flex-col items-center p-4">
-      <img id="imageDisplay" src="./images/image1.gif" alt="Cute kitten with flowers" class="rounded-md h-[300px] shadow-xl animate-pulse" style="object-fit: cover;" />
-      <h2 id="valentineQuestion" class="text-4xl font-bold italic text-[#bd1e59] my-4 text-center">Will you be my Valentine?</h2>
-      <div class="flex gap-4 pt-[20px] items-center" id="responseButtons">
-        <button id="yesButton" class="inline-flex items-center justify-center rounded-xl text-[20px] font-medium hover:bg-green-400 min-h-12 min-w-[75px] px-4 py-2 bg-green-500 text-white transition shadow-md">
-          Yes
-        </button>
-        <button id="noButton" class="inline-flex items-center justify-center rounded-xl text-[20px] font-medium transition hover:bg-red-700 h-12 min-w-[75px] px-4 py-2 bg-red-500 text-white shadow-md">
-          No
-        </button>
-      </div>
+<body>
+  <script>
+    function createHearts() {
+      for (let i = 0; i < 20; i++) {
+        let heart = document.createElement("div");
+        heart.innerHTML = "❤️";
+        heart.classList.add("heartfall");
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = Math.random() * 3 + 2 + "s";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+      }
+    }
+    setInterval(createHearts, 1000);
+  </script>
+  
+  <div class="flex items-center justify-center h-screen flex-col">
+    <img id="imageDisplay" src="./images/image1.gif" alt="Valentine Image" class="rounded-md h-[300px] shadow-lg transition-all duration-500">
+    <h2 id="valentineQuestion" class="text-4xl font-bold text-red-600 my-4 text-center">Will you be my Valentine?</h2>
+    <div class="flex gap-4" id="responseButtons">
+      <button id="yesButton" class="bounce px-6 py-3 bg-green-500 text-white rounded-xl text-2xl transition-all duration-500">Yes</button>
+      <button id="noButton" class="px-6 py-3 bg-red-500 text-white rounded-xl text-2xl transition-all duration-500">No</button>
     </div>
   </div>
-  <script type="module">
-    import confetti from 'https://cdn.skypack.dev/canvas-confetti';
-    const yesButton = document.getElementById('yesButton');
-    const noButton = document.getElementById('noButton');
-    const imageDisplay = document.getElementById('imageDisplay');
-    const valentineQuestion = document.getElementById('valentineQuestion');
-    const responseButtons = document.getElementById('responseButtons');
-    
+  
+  <script>
+    const yesButton = document.getElementById("yesButton");
+    const noButton = document.getElementById("noButton");
+    const imageDisplay = document.getElementById("imageDisplay");
+    const valentineQuestion = document.getElementById("valentineQuestion");
+    const responseButtons = document.getElementById("responseButtons");
     let noClickCount = 0;
-    let buttonHeight = 48;
-    let buttonWidth = 80;
-    let fontSize = 20;
-    const imagePaths = [
-      "./images/image1.gif", "./images/image2.gif", "./images/image3.gif", "./images/image4.gif", "./images/image5.gif", "./images/image6.gif", "./images/image7.gif"
-    ];
-    
-    noButton.addEventListener('click', function() {
-      if (noClickCount < 5) {
-        noClickCount++;
-        imageDisplay.src = imagePaths[noClickCount];
-        buttonHeight += 17;
-        buttonWidth += 25;
-        fontSize += 20;
-        yesButton.style.height = `${buttonHeight}px`;
-        yesButton.style.width = `${buttonWidth}px`;
-        yesButton.style.fontSize = `${fontSize}px`;
-        noButton.textContent = ["No", "Are you sure?", "Pookie please", "Don't do this to me :(", "You're breaking my heart", "I'm gonna cry..."][noClickCount];
-      }
+
+    noButton.addEventListener("mouseover", function() {
+      let x = Math.random() * 80;
+      let y = Math.random() * 80;
+      noButton.style.transform = `translate(${x}px, ${y}px)`;
     });
-    
-    yesButton.addEventListener('click', () => {
-      imageDisplay.src = './images/image7.gif';
-      valentineQuestion.textContent = "Yayyyy! You clicked YES? Great, my mom already likes you. 😂";
-      responseButtons.style.display = 'none';
+
+    yesButton.addEventListener("click", function() {
+      imageDisplay.src = "./images/image7.gif";
+      valentineQuestion.innerHTML = "Yayyyy! You clicked YES? My heart is happy! ❤️";
+      responseButtons.style.display = "none";
       confetti();
     });
   </script>
