@@ -12,45 +12,38 @@
     body {
       font-family: "Archivo", serif !important;
       overflow: hidden;
+      animation: changeBg 10s infinite alternate;
     }
-    .gradient-background {
-      background: linear-gradient(180deg, rgba(255, 208, 229, 1) 0%, rgba(255, 232, 242, 1) 36%, rgba(255, 255, 255, 1) 100%);
-      animation: bgFade 5s infinite alternate;
-    }
-    @keyframes bgFade {
-      0% { filter: brightness(1); }
-      100% { filter: brightness(1.2); }
-    }
-    .bounce2 {
-      animation: bounce2 2s ease infinite;
-    }
-    @keyframes bounce2 {
-      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-20px); }
-      60% { transform: translateY(-10px); }
+    @keyframes changeBg {
+      0% { background-color: #ffb6c1; }
+      50% { background-color: #ff69b4; }
+      100% { background-color: #ff1493; }
     }
     .heart {
       position: absolute;
-      animation: float 4s infinite ease-in-out;
+      color: red;
+      font-size: 24px;
+      animation: float 5s infinite ease-in-out;
     }
     @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
+      0% { transform: translateY(0); opacity: 1; }
+      50% { transform: translateY(-50px); opacity: 0.6; }
+      100% { transform: translateY(-100px); opacity: 0; }
     }
   </style>
 </head>
-<body class="gradient-background relative">
+<body class="relative">
   <div class="absolute top-0 left-0 w-full h-full overflow-hidden">
-    <img src="./images/heart.png" class="heart w-10 opacity-50" style="top: 10%; left: 20%;">
-    <img src="./images/heart.png" class="heart w-16 opacity-70" style="top: 40%; left: 70%; animation-duration: 6s;">
-    <img src="./images/heart.png" class="heart w-12 opacity-60" style="top: 70%; left: 50%; animation-duration: 5s;">
+    <span class="heart" style="top: 10%; left: 20%; animation-duration: 4s;">❤</span>
+    <span class="heart" style="top: 30%; left: 50%; animation-duration: 6s;">❤</span>
+    <span class="heart" style="top: 60%; left: 80%; animation-duration: 5s;">❤</span>
   </div>
   <div class="flex items-center justify-center h-screen relative z-10">
     <div class="flex flex-col items-center p-4">
       <img id="imageDisplay" src="./images/image1.gif" alt="Cute kitten with flowers" class="rounded-md h-[300px] shadow-xl animate-pulse" style="object-fit: cover;" />
       <h2 id="valentineQuestion" class="text-4xl font-bold italic text-[#bd1e59] my-4 text-center">Will you be my Valentine?</h2>
       <div class="flex gap-4 pt-[20px] items-center" id="responseButtons">
-        <button id="yesButton" class="bounce2 inline-flex items-center justify-center rounded-xl text-[20px] font-medium hover:bg-green-400 min-h-12 min-w-[75px] px-4 py-2 bg-green-500 text-white transition shadow-md">
+        <button id="yesButton" class="inline-flex items-center justify-center rounded-xl text-[20px] font-medium hover:bg-green-400 min-h-12 min-w-[75px] px-4 py-2 bg-green-500 text-white transition shadow-md">
           Yes
         </button>
         <button id="noButton" class="inline-flex items-center justify-center rounded-xl text-[20px] font-medium transition hover:bg-red-700 h-12 min-w-[75px] px-4 py-2 bg-red-500 text-white shadow-md">
